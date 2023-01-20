@@ -1,4 +1,8 @@
-# Stonks
+---
+description: Stock Simulation With a Bug
+---
+
+# 💹 Stonks
 
 The initial problem definition from their website is as follows:
 
