@@ -1,5 +1,6 @@
 from scipy.interpolate import interp1d
 import pylab
+import numpy as np
 
 x = np.linspace(0, 5, 10)
 y = np.exp(x) / np.cos(np.pi * x)
