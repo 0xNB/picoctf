@@ -2,11 +2,11 @@
 
 The initial problem definition from their website is as follows:
 
->I decided to try something no one else has before. I made a bot to automatically trade stonks for me using AI and machine learning. I wouldn't believe you if you told me it's unsecure! [vuln.c](https://mercury.picoctf.net/static/fdf270d959fa5231e180e2bd11421d0c/vuln.c) `nc mercury.picoctf.net 16439`
+> I decided to try something no one else has before. I made a bot to automatically trade stonks for me using AI and machine learning. I wouldn't believe you if you told me it's unsecure! [vuln.c](https://mercury.picoctf.net/static/fdf270d959fa5231e180e2bd11421d0c/vuln.c) `nc mercury.picoctf.net 16439`
 
-_taken from [PicoCTF](https://picoctf.net)_
+_taken from_ [_PicoCTF_](https://picoctf.net)
 
-# Solution
+## Solution
 
 When we examine the program with a code editor, we see that it's using the unsafe version of `printf` when getting the users' authorization token.
 
@@ -23,7 +23,7 @@ This small python snippet was executed and dumped the following memory fragment 
 0x7f3008b4fe79.0x7f3008ca1760.0x7f3008b50283.0x14.
 ```
 
-While we know that some values are ASCII characters, we could not find indicators as to why the first two variables were `1`s. The solution was that under `64 bit` Linux, the calling convention for syscalls takes arguments from the registers first, unlike with `32 bit` Linux. When compiling the binary under `32 bit` with the flag `-m32` in  `gcc`, we see that we get a different result:
+While we know that some values are ASCII characters, we could not find indicators as to why the first two variables were `1`s. The solution was that under `64 bit` Linux, the calling convention for syscalls takes arguments from the registers first, unlike with `32 bit` Linux. When compiling the binary under `32 bit` with the flag `-m32` in `gcc`, we see that we get a different result:
 
 ```html
 0x567bb3d0.0x565caff4.0x565c84ae.0xf7f76da0.0x7d4.0xf7f76de7.0x6f636970.0x7b465443.
@@ -31,7 +31,7 @@ While we know that some values are ASCII characters, we could not find indicator
 0xff007d30.0xf7fcac18.0xf7f8e800.0x1.0x1.
 ```
 
-## Verification of our Hypotheses
+### Verification of our Hypotheses
 
 To verify this hypothesis we constructed a smaller binary from this source:
 
