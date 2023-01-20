@@ -14,8 +14,8 @@ If you want to learn more about computer security and secure architectures this 
 
 <summary>Binary Reverse Engineering</summary>
 
-[Stonks](Stonks/ "mention")
+[stonks.md](reverse-engineering/stonks.md "mention")
 
-[Transformation](Transformation/ "mention")
+[transformation.md](reverse-engineering/transformation.md "mention")
 
 </details>
