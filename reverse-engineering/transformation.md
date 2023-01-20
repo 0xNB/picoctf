@@ -27,4 +27,4 @@ with open("enc", "r" ) as f:
     print(flag)
 ```
 
-Giving us the flag `picoCTF{16_bits_inst34d_of_8_26684c20}`!
+When applied to the binary blob from above, this gives us the flag `picoCTF{16_bits_inst34d_of_8_26684c20}`!
