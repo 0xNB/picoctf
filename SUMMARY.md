@@ -6,3 +6,7 @@
 
 * [💹 Stonks](reverse-engineering/stonks.md)
 * [🕵 Transformation](reverse-engineering/transformation.md)
+
+***
+
+* [🅾 Red](red.md)
