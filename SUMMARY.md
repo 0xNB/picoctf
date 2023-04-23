@@ -7,6 +7,10 @@
 * [💹 Stonks](reverse-engineering/stonks.md)
 * [🕵 Transformation](reverse-engineering/transformation.md)
 
-***
+## Web
 
-* [🅾 Red](red.md)
+* [🅾 Red](web/red.md)
+
+## Cryptography
+
+* [Easy Peasy](cryptography/easy-peasy.md)
